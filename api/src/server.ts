@@ -1,14 +1,13 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-// Route imports — uncomment as routes are created (Tasks 3-4)
-// import dashboardRoutes from './routes/dashboard.js';
-// import projectRoutes from './routes/projects.js';
-// import creditRoutes from './routes/credits.js';
-// import comparisonRoutes from './routes/comparisons.js';
-// import transactionRoutes from './routes/transactions.js';
-// import storyRoutes from './routes/stories.js';
-// import verificationRoutes from './routes/verifications.js';
-// import ledgerRoutes from './routes/ledger.js';
+import dashboardRoutes from './routes/dashboard.js';
+import projectRoutes from './routes/projects.js';
+import creditRoutes from './routes/credits.js';
+import comparisonRoutes from './routes/comparisons.js';
+import transactionRoutes from './routes/transactions.js';
+import storyRoutes from './routes/stories.js';
+import verificationRoutes from './routes/verifications.js';
+import ledgerRoutes from './routes/ledger.js';
 
 const server = Fastify({ logger: true });
 
@@ -31,15 +30,15 @@ server.setErrorHandler((error: Error & { statusCode?: number }, _request, reply)
   });
 });
 
-// Register route modules — uncomment as routes are created (Tasks 3-4)
-// await server.register(dashboardRoutes);
-// await server.register(projectRoutes);
-// await server.register(creditRoutes);
-// await server.register(comparisonRoutes);
-// await server.register(transactionRoutes);
-// await server.register(storyRoutes);
-// await server.register(verificationRoutes);
-// await server.register(ledgerRoutes);
+// Register route modules
+await server.register(dashboardRoutes);
+await server.register(projectRoutes);
+await server.register(creditRoutes);
+await server.register(comparisonRoutes);
+await server.register(transactionRoutes);
+await server.register(storyRoutes);
+await server.register(verificationRoutes);
+await server.register(ledgerRoutes);
 
 const port = Number(process.env.PORT) || 4000;
 await server.listen({ port, host: '0.0.0.0' });
