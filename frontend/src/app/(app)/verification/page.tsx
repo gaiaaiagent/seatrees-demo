@@ -9,7 +9,7 @@ import { LiveQueryPanel } from '@/components/verification/LiveQueryPanel'
 import { BatchTimeline } from '@/components/verification/BatchTimeline'
 import { RetirementWaterfall } from '@/components/verification/RetirementWaterfall'
 import { VerificationChain } from '@/components/verification/VerificationChain'
-import type { Credit, Verification } from '@/types'
+import type { Credit, VerificationGroup } from '@/types'
 
 function SkeletonBlock({ className }: { className?: string }) {
   return (
@@ -29,13 +29,13 @@ function ConnectingState() {
 
 export default function VerificationPage() {
   const [credits, setCredits] = useState<Credit[] | null>(null)
-  const [verifications, setVerifications] = useState<Verification[] | null>(null)
+  const [verifications, setVerifications] = useState<VerificationGroup[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
       api<Credit[]>('/api/credits'),
-      api<Verification[]>('/api/verifications'),
+      api<VerificationGroup[]>('/api/verifications'),
     ])
       .then(([creditData, verificationData]) => {
         setCredits(creditData)
@@ -128,7 +128,7 @@ export default function VerificationPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <VerificationChain chain={verifications} />
+                <VerificationChain groups={verifications} />
               </CardContent>
             </Card>
           </ErrorBoundary>

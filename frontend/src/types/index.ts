@@ -87,6 +87,13 @@ export interface Story {
   audience: string;
 }
 
+export interface VerificationGroup {
+  batch_denom: string;
+  project_name: string;
+  project_slug: string;
+  chain: Verification[];
+}
+
 // Composite types
 export interface ProjectWithStats extends Project {
   ecosystem_name: string;
