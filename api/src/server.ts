@@ -15,6 +15,7 @@ await server.register(cors, {
   origin: [
     'http://localhost:3000',
     'https://seatrees.gaiaai.xyz',
+    'https://seatrees-frontend.vercel.app',
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
   ],
 });
