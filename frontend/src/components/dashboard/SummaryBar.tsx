@@ -63,7 +63,7 @@ export function SummaryBar({ summary }: SummaryBarProps) {
 
   return (
     <motion.div
-      className="grid grid-cols-2 gap-4 md:grid-cols-4"
+      className="grid grid-cols-2 gap-3 md:grid-cols-4"
       variants={containerVariants}
       initial="hidden"
       animate="show"
@@ -74,11 +74,11 @@ export function SummaryBar({ summary }: SummaryBarProps) {
           <motion.div
             key={card.label}
             variants={itemVariants}
-            className="glass-card rounded-xl p-4 relative"
+            className="rounded-xl bg-[var(--st-card)] px-4 py-3 relative shadow-[var(--shadow-card)] border border-[var(--st-border)]"
           >
-            <Icon className="size-4 text-muted-foreground absolute top-4 right-4" />
-            <p className="text-primary text-2xl font-bold font-mono">{card.value}</p>
-            <p className="text-muted-foreground text-sm mt-1">{card.label}</p>
+            <Icon className="size-3.5 text-[var(--st-text-muted)] absolute top-3 right-3" />
+            <p className="text-[var(--st-primary)] text-xl font-bold font-mono">{card.value}</p>
+            <p className="text-[var(--st-text-muted)] text-xs mt-0.5">{card.label}</p>
           </motion.div>
         )
       })}

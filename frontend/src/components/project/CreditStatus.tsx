@@ -27,14 +27,14 @@ export function CreditStatus({ credits }: CreditStatusProps) {
 
   if (!credit) {
     return (
-      <Card>
+      <Card className="shadow-[var(--shadow-card)]">
         <CardHeader>
-          <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
+          <CardTitle className="text-sm uppercase tracking-wide text-[var(--st-text-muted)]">
             Credit Status
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground text-center py-8">
+          <p className="text-sm text-[var(--st-text-muted)] text-center py-8">
             No credit data available.
           </p>
         </CardContent>
@@ -71,18 +71,18 @@ export function CreditStatus({ credits }: CreditStatusProps) {
       : credit.batch_denom
 
   return (
-    <Card>
+    <Card className="shadow-[var(--shadow-card)]">
       <CardHeader>
-        <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
+        <CardTitle className="text-sm uppercase tracking-wide text-[var(--st-text-muted)]">
           Credit Status
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Batch Denom */}
         <div>
-          <p className="text-xs text-muted-foreground mb-1">Batch Denom</p>
+          <p className="text-xs text-[var(--st-text-muted)] mb-1">Batch Denom</p>
           <div className="flex items-center gap-2">
-            <code className="font-mono text-xs bg-muted px-2 py-1 rounded">
+            <code className="font-mono text-xs bg-muted border border-[var(--st-border)] px-2 py-1 rounded text-[var(--st-text)]">
               {truncatedDenom}
             </code>
             <Button variant="ghost" size="icon-xs" onClick={handleCopy}>
@@ -93,7 +93,7 @@ export function CreditStatus({ credits }: CreditStatusProps) {
 
         {/* Progress */}
         <div>
-          <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+          <div className="flex items-center justify-between text-xs text-[var(--st-text-muted)] mb-2">
             <span>Retired / Issued</span>
             <span className="font-mono">{retiredPct}%</span>
           </div>
@@ -103,20 +103,20 @@ export function CreditStatus({ credits }: CreditStatusProps) {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <p className="text-xs text-muted-foreground">Issued</p>
-            <p className="font-mono text-sm font-semibold">
+            <p className="text-xs text-[var(--st-text-muted)]">Issued</p>
+            <p className="font-mono text-sm font-semibold text-[var(--st-text)]">
               {new Intl.NumberFormat().format(credit.total_issued)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Retired</p>
-            <p className="font-mono text-sm font-semibold">
+            <p className="text-xs text-[var(--st-text-muted)]">Retired</p>
+            <p className="font-mono text-sm font-semibold text-[var(--st-text)]">
               {new Intl.NumberFormat().format(credit.total_retired)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Tradeable</p>
-            <p className="font-mono text-sm font-semibold">
+            <p className="text-xs text-[var(--st-text-muted)]">Tradeable</p>
+            <p className="font-mono text-sm font-semibold text-[var(--st-text)]">
               {new Intl.NumberFormat().format(credit.total_tradeable)}
             </p>
           </div>
@@ -147,8 +147,8 @@ export function CreditStatus({ credits }: CreditStatusProps) {
               variant="secondary"
               className={
                 source === 'live'
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
               }
             >
               {source === 'live' ? 'Live' : 'Cached'}

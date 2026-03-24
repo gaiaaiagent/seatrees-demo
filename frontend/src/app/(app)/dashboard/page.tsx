@@ -22,9 +22,9 @@ interface TransactionRow {
 
 function SkeletonBar() {
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-24 skeleton-shimmer rounded-xl border bg-muted" />
+        <div key={i} className="h-16 animate-pulse rounded-xl border border-[var(--st-border)] bg-[var(--st-card)]" />
       ))}
     </div>
   )
@@ -32,14 +32,14 @@ function SkeletonBar() {
 
 function SkeletonBlock({ className }: { className?: string }) {
   return (
-    <div className={`skeleton-shimmer rounded-xl border bg-muted ${className ?? ''}`} />
+    <div className={`animate-pulse rounded-xl border border-[var(--st-border)] bg-[var(--st-card)] ${className ?? ''}`} />
   )
 }
 
 function ConnectingState() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-      <div className="size-8 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground mb-4" />
+    <div className="flex flex-col items-center justify-center py-20 text-[var(--st-text-muted)]">
+      <div className="size-8 animate-spin rounded-full border-2 border-[var(--st-border)] border-t-[var(--st-primary)] mb-4" />
       <p className="text-sm font-medium">Connecting to data service...</p>
       <p className="text-xs mt-1">Please wait while we load your dashboard</p>
     </div>
@@ -66,7 +66,7 @@ export default function DashboardPage() {
   if (error) {
     return (
       <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-[var(--st-text)]">Portfolio Dashboard</h1>
         <ConnectingState />
       </div>
     )
@@ -74,72 +74,73 @@ export default function DashboardPage() {
 
   if (!data) {
     return (
-      <div className="space-y-6 p-6">
+      <div className="space-y-3 p-4">
         <SkeletonBar />
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
-          <SkeletonBlock className="min-h-[400px]" />
-          <div className="space-y-4">
-            <SkeletonBlock className="min-h-[300px]" />
-            <SkeletonBlock className="min-h-[300px]" />
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[3fr_2fr]">
+          <SkeletonBlock className="min-h-[280px]" />
+          <div className="space-y-3">
+            <SkeletonBlock className="min-h-[180px]" />
+            <SkeletonBlock className="min-h-[180px]" />
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <SkeletonBlock key={i} className="h-36" />
+            <SkeletonBlock key={i} className="h-24" />
           ))}
         </div>
       </div>
     )
   }
 
-  // Build purchase breakdown from transaction summary
   const purchaseBreakdown = buildPurchaseBreakdown(txData ?? [])
 
   return (
     <PageTransition>
-      <div className="space-y-6 p-6">
+      <div className="space-y-3 p-4">
         {/* Summary metrics */}
         <ErrorBoundary>
-          <SummaryBar summary={data} />
+          <div data-tour="key-metrics">
+            <SummaryBar summary={data} />
+          </div>
         </ErrorBoundary>
 
         {/* Map + Charts */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[3fr_2fr]">
           <ErrorBoundary>
-            <Card className="gap-0 py-0 overflow-hidden">
-              <CardHeader className="py-4">
-                <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+            <Card className="gap-0 py-0 overflow-hidden shadow-[var(--shadow-card)]" data-tour="nav-map">
+              <CardHeader className="py-2.5 px-4">
+                <CardTitle className="text-xs font-semibold tracking-wide uppercase text-[var(--st-text-muted)]">
                   Global Projects
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0 h-[400px]">
+              <CardContent className="p-0 h-[280px]">
                 <ProjectMap projects={data.projects} />
               </CardContent>
             </Card>
           </ErrorBoundary>
 
-          <div className="space-y-4">
+          <div className="flex flex-col gap-3">
             <ErrorBoundary>
-              <Card className="gap-0 py-0 overflow-hidden">
-                <CardHeader className="py-4">
-                  <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+              <Card className="gap-0 py-0 overflow-hidden shadow-[var(--shadow-card)] flex-1 flex flex-col">
+                <CardHeader className="py-2 px-4">
+                  <CardTitle className="text-xs font-semibold tracking-wide uppercase text-[var(--st-text-muted)]">
                     Transaction Volume
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-4">
+                <CardContent className="pb-1 px-3 flex-1">
                   <TransactionChart data={txData ?? []} />
                 </CardContent>
               </Card>
             </ErrorBoundary>
 
             <ErrorBoundary>
-              <Card className="gap-0 py-0 overflow-hidden">
-                <CardHeader className="py-4">
-                  <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+              <Card className="gap-0 py-0 overflow-hidden shadow-[var(--shadow-card)] flex-1 flex flex-col">
+                <CardHeader className="py-2 px-4">
+                  <CardTitle className="text-xs font-semibold tracking-wide uppercase text-[var(--st-text-muted)]">
                     Purchase Breakdown
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-4">
+                <CardContent className="pb-1 px-3 flex-1">
                   <PurchaseTypeChart data={purchaseBreakdown} />
                 </CardContent>
               </Card>
@@ -150,13 +151,13 @@ export default function DashboardPage() {
         {/* Project grid */}
         <ErrorBoundary>
           <div>
-            <h2 className="text-sm font-semibold tracking-wide uppercase text-muted-foreground mb-4">
+            <h2 className="text-xs font-semibold tracking-wide uppercase text-[var(--st-text-muted)] mb-2">
               All Projects
             </h2>
             {data.projects.length > 0 ? (
               <ProjectGrid projects={data.projects} />
             ) : (
-              <p className="text-sm text-muted-foreground py-8 text-center">
+              <p className="text-sm text-[var(--st-text-muted)] py-8 text-center">
                 No project data available
               </p>
             )}
@@ -177,8 +178,8 @@ function buildPurchaseBreakdown(rows: TransactionRow[]) {
   }
 
   return [
-    { name: 'B2C', value: totals.b2c, color: '#06B6D4' },
+    { name: 'B2C', value: totals.b2c, color: '#0e7490' },
     { name: 'B2B', value: totals.b2b, color: '#10B981' },
-    { name: 'Untagged', value: totals.untagged, color: '#F59E0B' },
+    { name: 'Untagged', value: totals.untagged, color: '#d97706' },
   ].filter((d) => d.value > 0)
 }

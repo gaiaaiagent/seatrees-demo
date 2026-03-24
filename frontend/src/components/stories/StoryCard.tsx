@@ -9,10 +9,10 @@ import { StoryDetail } from './StoryDetail'
 import type { Story } from '@/types'
 
 const typeColors: Record<Story['story_type'], string> = {
-  pmu: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  explainer: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-  faq: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-  comparison: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+  pmu: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  explainer: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+  faq: 'bg-amber-50 text-amber-700 border-amber-200',
+  comparison: 'bg-violet-50 text-violet-700 border-violet-200',
 }
 
 const typeLabels: Record<Story['story_type'], string> = {
@@ -51,7 +51,7 @@ export function StoryCard({ story, expanded = false, onToggle }: StoryCardProps)
     <motion.div
       layout
       className={
-        'glass-card rounded-xl p-4 cursor-pointer transition-colors hover:border-primary/30' +
+        'rounded-xl bg-[var(--st-card)] p-4 cursor-pointer transition-shadow border border-[var(--st-border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]' +
         (expanded ? ' col-span-1 md:col-span-2 lg:col-span-3' : '')
       }
       onClick={() => onToggle?.()}
@@ -85,16 +85,16 @@ export function StoryCard({ story, expanded = false, onToggle }: StoryCardProps)
               </Badge>
             </div>
 
-            <h3 className="font-semibold text-lg leading-snug">{story.title}</h3>
+            <h3 className="font-semibold text-lg leading-snug text-[var(--st-text)]">{story.title}</h3>
 
-            <p className="text-sm text-muted-foreground line-clamp-3">
+            <p className="text-sm text-[var(--st-text-muted)] line-clamp-3">
               {preview}
             </p>
 
             <div className="pt-1">
               <Button variant="outline" size="xs" onClick={handleCopy}>
                 {copied ? (
-                  <Check className="size-3 text-emerald-400" />
+                  <Check className="size-3 text-emerald-500" />
                 ) : (
                   <Copy className="size-3" />
                 )}

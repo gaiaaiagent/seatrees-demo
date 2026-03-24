@@ -23,49 +23,49 @@ export function CommunityImpact({ project }: CommunityImpactProps) {
   }
 
   return (
-    <Card className="border-emerald-500/20">
+    <Card className="border-emerald-200 shadow-[var(--shadow-card)]">
       <CardHeader>
-        <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
+        <CardTitle className="text-sm uppercase tracking-wide text-[var(--st-text-muted)]">
           Community Partnership
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <p className="text-xl font-semibold">{project.partner}</p>
-          <p className="text-sm text-muted-foreground">{info.fullName}</p>
+          <p className="text-xl font-semibold text-[var(--st-text)]">{project.partner}</p>
+          <p className="text-sm text-[var(--st-text-muted)]">{info.fullName}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="glass-card rounded-lg p-3 flex items-start gap-3">
-            <div className="size-8 rounded-md bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <Heart className="size-4 text-emerald-400" />
+          <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 flex items-start gap-3">
+            <div className="size-8 rounded-md bg-emerald-100 flex items-center justify-center shrink-0">
+              <Heart className="size-4 text-emerald-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold">50%+ Revenue</p>
-              <p className="text-xs text-muted-foreground">Directed to local community</p>
+              <p className="text-sm font-semibold text-[var(--st-text)]">50%+ Revenue</p>
+              <p className="text-xs text-[var(--st-text-muted)]">Directed to local community</p>
             </div>
           </div>
-          <div className="glass-card rounded-lg p-3 flex items-start gap-3">
-            <div className="size-8 rounded-md bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <Users className="size-4 text-emerald-400" />
+          <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 flex items-start gap-3">
+            <div className="size-8 rounded-md bg-emerald-100 flex items-center justify-center shrink-0">
+              <Users className="size-4 text-emerald-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold">Local Stewardship</p>
-              <p className="text-xs text-muted-foreground">Community-led monitoring</p>
+              <p className="text-sm font-semibold text-[var(--st-text)]">Local Stewardship</p>
+              <p className="text-xs text-[var(--st-text-muted)]">Community-led monitoring</p>
             </div>
           </div>
-          <div className="glass-card rounded-lg p-3 flex items-start gap-3">
-            <div className="size-8 rounded-md bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <Sprout className="size-4 text-emerald-400" />
+          <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 flex items-start gap-3">
+            <div className="size-8 rounded-md bg-emerald-100 flex items-center justify-center shrink-0">
+              <Sprout className="size-4 text-emerald-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold">Livelihood Support</p>
-              <p className="text-xs text-muted-foreground">Training & employment</p>
+              <p className="text-sm font-semibold text-[var(--st-text)]">Livelihood Support</p>
+              <p className="text-xs text-[var(--st-text-muted)]">Training & employment</p>
             </div>
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground leading-relaxed">{info.description}</p>
+        <p className="text-sm text-[var(--st-text-muted)] leading-relaxed">{info.description}</p>
       </CardContent>
     </Card>
   )

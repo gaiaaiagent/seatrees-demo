@@ -13,25 +13,11 @@ interface PurchaseTypeChartProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function renderLabel({ cx, cy, total }: { cx: number; cy: number; total: number }) {
-  return (
-    <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central">
-      <tspan x={cx} dy="-0.4em" fill="#E2E8F0" fontSize="18" fontWeight="700" fontFamily="var(--font-mono)">
-        {new Intl.NumberFormat().format(total)}
-      </tspan>
-      <tspan x={cx} dy="1.4em" fill="#94A3B8" fontSize="11">
-        Total
-      </tspan>
-    </text>
-  )
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomLegend({ payload }: any) {
   return (
     <div className="flex items-center justify-center gap-4 mt-2">
       {payload?.map((entry: any) => (
-        <span key={entry.value} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <span key={entry.value} className="flex items-center gap-1.5 text-xs text-[var(--st-text-muted)]">
           <span
             className="size-2.5 rounded-full"
             style={{ backgroundColor: entry.color }}
@@ -48,21 +34,21 @@ export function PurchaseTypeChart({ data }: PurchaseTypeChartProps) {
 
   if (total === 0) {
     return (
-      <div className="flex items-center justify-center h-[250px] text-muted-foreground text-sm">
+      <div className="flex items-center justify-center h-[140px] text-[var(--st-text-muted)] text-sm">
         No purchase data available
       </div>
     )
   }
 
   return (
-    <ResponsiveContainer width="100%" height={250}>
+    <ResponsiveContainer width="100%" height={140}>
       <PieChart>
         <Pie
           data={data}
           cx="50%"
-          cy="45%"
-          innerRadius={60}
-          outerRadius={100}
+          cy="42%"
+          innerRadius={35}
+          outerRadius={58}
           paddingAngle={2}
           dataKey="value"
           strokeWidth={0}
@@ -74,21 +60,21 @@ export function PurchaseTypeChart({ data }: PurchaseTypeChartProps) {
         {/* Center label */}
         <text
           x="50%"
-          y="45%"
+          y="42%"
           textAnchor="middle"
           dominantBaseline="central"
         >
           <tspan
             x="50%"
-            dy="-0.4em"
-            fill="#E2E8F0"
-            fontSize="18"
+            dy="-0.3em"
+            fill="#1a2b3d"
+            fontSize="13"
             fontWeight="700"
             fontFamily="var(--font-mono)"
           >
             {new Intl.NumberFormat().format(total)}
           </tspan>
-          <tspan x="50%" dy="1.4em" fill="#94A3B8" fontSize="11">
+          <tspan x="50%" dy="1.2em" fill="#6b7f93" fontSize="9">
             Total
           </tspan>
         </text>

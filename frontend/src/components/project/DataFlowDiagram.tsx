@@ -15,19 +15,19 @@ const stages: { icon: LucideIcon; title: string; subtitle: string; accent: strin
     icon: Eye,
     title: 'Ocean Ledger Satellite',
     subtitle: 'Remote sensing verification',
-    accent: '#06B6D4',
+    accent: '#0e7490',
   },
   {
     icon: Shield,
     title: 'Regen Verification',
     subtitle: 'Third-party attestation',
-    accent: '#F59E0B',
+    accent: '#d97706',
   },
   {
     icon: Link,
     title: 'On-Chain Record',
     subtitle: 'Immutable ledger entry',
-    accent: 'var(--primary)',
+    accent: 'var(--st-primary)',
   },
 ]
 
@@ -50,7 +50,7 @@ const itemVariants = {
 export function DataFlowDiagram() {
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-[var(--st-text-muted)]">
         Data Verification Pipeline
       </h3>
       <motion.div
@@ -64,17 +64,17 @@ export function DataFlowDiagram() {
           return (
             <motion.div key={stage.title} variants={itemVariants} className="flex items-stretch">
               <div
-                className="glass-card rounded-xl p-4 flex-1 flex flex-col items-center text-center gap-2"
+                className="rounded-xl bg-[var(--st-card)] p-4 flex-1 flex flex-col items-center text-center gap-2 shadow-[var(--shadow-card)] border border-[var(--st-border)]"
                 style={{ borderTop: `2px solid ${stage.accent}` }}
               >
                 <div
                   className="size-10 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: `${stage.accent}20` }}
+                  style={{ backgroundColor: `${stage.accent}15` }}
                 >
                   <Icon className="size-5" style={{ color: stage.accent }} />
                 </div>
-                <p className="text-sm font-semibold">{stage.title}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-sm font-semibold text-[var(--st-text)]">{stage.title}</p>
+                <p className="text-xs text-[var(--st-text-muted)] leading-relaxed">
                   {stage.subtitle}
                 </p>
               </div>
@@ -83,7 +83,7 @@ export function DataFlowDiagram() {
                   <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
                     <path
                       d="M0 6h20m0 0l-4-4m4 4l-4 4"
-                      stroke="#94A3B8"
+                      stroke="#6b7f93"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"

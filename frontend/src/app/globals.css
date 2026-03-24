@@ -1,12 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-jetbrains-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -49,38 +47,66 @@
 :root {
   --radius: 0.625rem;
 
-  /* Always dark — ocean theme */
-  --background: #0A1628;
-  --foreground: #E2E8F0;
-  --card: #0F1D32;
-  --card-foreground: #E2E8F0;
-  --popover: #0F1D32;
-  --popover-foreground: #E2E8F0;
-  --primary: #06B6D4;
-  --primary-foreground: #0A1628;
-  --secondary: #1E293B;
-  --secondary-foreground: #E2E8F0;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #1E293B;
-  --accent-foreground: #E2E8F0;
-  --destructive: #F43F5E;
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: #06B6D4;
-  --chart-1: #06B6D4;
+  /* Light ocean theme */
+  --background: #f0f7fa;
+  --foreground: #1a2b3d;
+  --card: #ffffff;
+  --card-foreground: #1a2b3d;
+  --popover: #ffffff;
+  --popover-foreground: #1a2b3d;
+  --primary: #0e7490;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f4f8;
+  --secondary-foreground: #1a2b3d;
+  --muted: #e8f0f4;
+  --muted-foreground: #6b7f93;
+  --accent: #e8f4f8;
+  --accent-foreground: #1a2b3d;
+  --destructive: #dc2626;
+  --border: #dbe5ec;
+  --input: #dbe5ec;
+  --ring: #0e7490;
+  --chart-1: #0e7490;
   --chart-2: #10B981;
-  --chart-3: #F59E0B;
+  --chart-3: #d97706;
   --chart-4: #8B5CF6;
   --chart-5: #F43F5E;
-  --sidebar: #081020;
-  --sidebar-foreground: #E2E8F0;
-  --sidebar-primary: #06B6D4;
-  --sidebar-primary-foreground: #0A1628;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #E2E8F0;
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: #06B6D4;
+  --sidebar: #f8fbfc;
+  --sidebar-foreground: #1a2b3d;
+  --sidebar-primary: #0e7490;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8f4f8;
+  --sidebar-accent-foreground: #1a2b3d;
+  --sidebar-border: #dbe5ec;
+  --sidebar-ring: #0e7490;
+
+  /* SeaTrees ocean palette */
+  --st-bg: #f0f7fa;
+  --st-card: #ffffff;
+  --st-text: #1a2b3d;
+  --st-text-muted: #6b7f93;
+  --st-primary: #0e7490;
+  --st-primary-light: #22d3ee;
+  --st-primary-pale: #cffafe;
+  --st-primary-deep: #164e63;
+  --st-accent: #d97706;
+  --st-border: #dbe5ec;
+  --st-sidebar: #f8fbfc;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+
+  /* Gradients */
+  --gradient-ocean: linear-gradient(135deg, #0e7490 0%, #22d3ee 100%);
+  --gradient-cta: linear-gradient(135deg, #0e7490 0%, #0891b2 100%);
+  --gradient-hero-overlay: linear-gradient(180deg, rgba(14, 116, 144, 0.08) 0%, rgba(240, 247, 250, 1) 100%);
+
+  /* Status colors */
+  --status-active: #059669;
+  --status-monitoring: #d97706;
+  --status-planned: #6b7f93;
 
   /* Ecosystem colors */
   --eco-mangrove: #10B981;
@@ -91,30 +117,66 @@
   --eco-shellfish: #8B5CF6;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+.dark {
+  --background: #0c1a24;
+  --foreground: #e2edf3;
+  --card: #132736;
+  --card-foreground: #e2edf3;
+  --popover: #132736;
+  --popover-foreground: #e2edf3;
+  --primary: #22d3ee;
+  --primary-foreground: #0c1a24;
+  --secondary: #1e3a4f;
+  --secondary-foreground: #e2edf3;
+  --muted: #1a3043;
+  --muted-foreground: #7b95a8;
+  --accent: #1e3a4f;
+  --accent-foreground: #e2edf3;
+  --destructive: #ef4444;
+  --border: #1e3a4f;
+  --input: #1e3a4f;
+  --ring: #22d3ee;
+  --chart-1: #22d3ee;
+  --chart-2: #34d399;
+  --chart-3: #fbbf24;
+  --chart-4: #a78bfa;
+  --chart-5: #fb7185;
+  --sidebar: #0f2231;
+  --sidebar-foreground: #e2edf3;
+  --sidebar-primary: #22d3ee;
+  --sidebar-primary-foreground: #0c1a24;
+  --sidebar-accent: #1e3a4f;
+  --sidebar-accent-foreground: #e2edf3;
+  --sidebar-border: #1e3a4f;
+  --sidebar-ring: #22d3ee;
 
-.skeleton-shimmer {
-  background: linear-gradient(90deg, var(--muted) 25%, var(--accent) 50%, var(--muted) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
+  /* SeaTrees ocean palette — dark */
+  --st-bg: #0c1a24;
+  --st-card: #132736;
+  --st-text: #e2edf3;
+  --st-text-muted: #7b95a8;
+  --st-primary: #22d3ee;
+  --st-primary-light: #67e8f9;
+  --st-primary-pale: #164e63;
+  --st-primary-deep: #a5f3fc;
+  --st-accent: #fbbf24;
+  --st-border: #1e3a4f;
+  --st-sidebar: #0f2231;
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 8px oklch(0.7 0.15 195 / 30%); }
-  50% { box-shadow: 0 0 20px oklch(0.7 0.15 195 / 60%); }
-}
+  /* Shadows — darker */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.5), 0 8px 16px rgba(0, 0, 0, 0.3);
 
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
+  /* Gradients */
+  --gradient-ocean: linear-gradient(135deg, #0891b2 0%, #22d3ee 100%);
+  --gradient-cta: linear-gradient(135deg, #0891b2 0%, #22d3ee 100%);
+  --gradient-hero-overlay: linear-gradient(180deg, rgba(34, 211, 238, 0.06) 0%, rgba(12, 26, 36, 1) 100%);
 
-.glass-card {
-  background: oklch(0.15 0.02 230 / 60%);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(1 0 0 / 8%);
+  /* Status colors */
+  --status-active: #34d399;
+  --status-monitoring: #fbbf24;
+  --status-planned: #7b95a8;
 }
 
 @layer base {

@@ -25,7 +25,7 @@ export function ProjectMap({ projects, className = '' }: ProjectMapProps) {
     try {
       const map = new maplibregl.Map({
         container: mapContainer.current,
-        style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
         center: [20, 5],
         zoom: 1.5,
         attributionControl: false,
@@ -34,50 +34,50 @@ export function ProjectMap({ projects, className = '' }: ProjectMapProps) {
       mapRef.current = map
 
       map.on('load', () => {
-        // Find max trees for scaling
         const maxTrees = Math.max(...projects.map((p) => p.trees_planted))
 
         projects.forEach((project) => {
-          // Logarithmic size scaling: 10px to 32px
           const logScale = Math.log(project.trees_planted + 1) / Math.log(maxTrees + 1)
           const size = 10 + logScale * 22
 
-          // Create marker element
+          // Outer wrapper — MapLibre controls its transform for positioning
           const el = document.createElement('div')
           el.style.width = `${size}px`
           el.style.height = `${size}px`
-          el.style.borderRadius = '50%'
-          el.style.backgroundColor = project.ecosystem_color || '#06B6D4'
-          el.style.opacity = '0.85'
           el.style.cursor = 'pointer'
-          el.style.border = '2px solid rgba(255,255,255,0.2)'
-          el.style.transition = 'transform 0.2s, opacity 0.2s'
 
-          if (project.status === 'active') {
-            el.classList.add('pulse-glow')
-          }
+          // Inner circle — safe to transform without breaking positioning
+          const inner = document.createElement('div')
+          inner.style.width = '100%'
+          inner.style.height = '100%'
+          inner.style.borderRadius = '50%'
+          inner.style.backgroundColor = project.ecosystem_color || '#0e7490'
+          inner.style.opacity = '0.85'
+          inner.style.border = '2px solid rgba(255,255,255,0.8)'
+          inner.style.boxShadow = '0 1px 4px rgba(0,0,0,0.15)'
+          inner.style.transition = 'transform 0.2s, opacity 0.2s'
+          el.appendChild(inner)
 
           el.addEventListener('mouseenter', () => {
-            el.style.transform = 'scale(1.2)'
-            el.style.opacity = '1'
+            inner.style.transform = 'scale(1.2)'
+            inner.style.opacity = '1'
           })
           el.addEventListener('mouseleave', () => {
-            el.style.transform = 'scale(1)'
-            el.style.opacity = '0.85'
+            inner.style.transform = 'scale(1)'
+            inner.style.opacity = '0.85'
           })
 
-          // Popup on hover
           const popup = new maplibregl.Popup({
             offset: size / 2 + 4,
             closeButton: false,
             closeOnClick: false,
             className: 'seatrees-popup',
           }).setHTML(`
-            <div style="background:#0F1D32;color:#E2E8F0;padding:8px 12px;border-radius:8px;font-size:12px;min-width:140px;">
+            <div style="background:var(--st-card);color:var(--st-text);padding:8px 12px;border-radius:8px;font-size:12px;min-width:140px;border:1px solid var(--st-border);box-shadow:var(--shadow-card);">
               <div style="font-weight:600;margin-bottom:4px;">${project.name}</div>
-              <div style="color:#94A3B8;margin-bottom:2px;">${project.ecosystem_name}</div>
-              <div style="color:#94A3B8;">${project.trees_planted.toLocaleString()} trees</div>
-              <div style="color:#94A3B8;">${project.partner}</div>
+              <div style="color:var(--st-text-muted);margin-bottom:2px;">${project.ecosystem_name}</div>
+              <div style="color:var(--st-text-muted);">${project.trees_planted.toLocaleString()} trees</div>
+              <div style="color:var(--st-text-muted);">${project.partner}</div>
             </div>
           `)
 
@@ -118,14 +118,14 @@ export function ProjectMap({ projects, className = '' }: ProjectMapProps) {
 
   if (error) {
     return (
-      <div className={`flex items-center justify-center rounded-xl border border-border bg-card p-8 text-muted-foreground ${className}`}>
+      <div className={`flex items-center justify-center rounded-xl border border-[var(--st-border)] bg-[var(--st-card)] p-8 text-[var(--st-text-muted)] ${className}`}>
         <p className="text-sm">Map unavailable. Tracking {projects.length} projects.</p>
       </div>
     )
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-xl border border-border ${className}`}>
+    <div className={`relative overflow-hidden rounded-xl border border-[var(--st-border)] ${className}`}>
       <div ref={mapContainer} className="h-full w-full" style={{ minHeight: 300 }} />
     </div>
   )

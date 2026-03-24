@@ -42,15 +42,15 @@ interface ProjectDetail {
 function SkeletonBlock({ className }: { className?: string }) {
   return (
     <div
-      className={`skeleton-shimmer rounded-xl border bg-muted ${className ?? ''}`}
+      className={`animate-pulse rounded-xl border border-[var(--st-border)] bg-[var(--st-card)] ${className ?? ''}`}
     />
   )
 }
 
 function ConnectingState() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-      <div className="size-8 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground mb-4" />
+    <div className="flex flex-col items-center justify-center py-20 text-[var(--st-text-muted)]">
+      <div className="size-8 animate-spin rounded-full border-2 border-[var(--st-border)] border-t-[var(--st-primary)] mb-4" />
       <p className="text-sm font-medium">Connecting to data service...</p>
       <p className="text-xs mt-1">Please wait while we load project details</p>
     </div>
@@ -58,9 +58,9 @@ function ConnectingState() {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  active: 'bg-emerald-500/20 text-emerald-400',
-  monitoring: 'bg-cyan-500/20 text-cyan-400',
-  planned: 'bg-amber-500/20 text-amber-400',
+  active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  monitoring: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+  planned: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
 export default function ProjectPage() {
@@ -80,7 +80,7 @@ export default function ProjectPage() {
 
   if (error) {
     return (
-      <div className="p-6">
+      <div className="p-4">
         <Link
           href="/dashboard"
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -94,14 +94,14 @@ export default function ProjectPage() {
 
   if (!data) {
     return (
-      <div className="space-y-6 p-6">
+      <div className="space-y-4 p-4">
         <SkeletonBlock className="h-10 w-48" />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
             <SkeletonBlock key={i} className="h-24" />
           ))}
         </div>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr]">
           <SkeletonBlock className="h-80" />
           <SkeletonBlock className="h-80" />
         </div>
@@ -132,7 +132,7 @@ export default function ProjectPage() {
 
   return (
     <PageTransition>
-      <div className="space-y-6 p-6">
+      <div className="space-y-4 p-4">
         {/* Hero Header */}
         <div>
           <Link
@@ -177,7 +177,7 @@ export default function ProjectPage() {
         </ErrorBoundary>
 
         {/* Two-column: Monitoring + Credits */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr]">
           <ErrorBoundary>
             <MonitoringTimeline data={data.monitoring ?? []} />
           </ErrorBoundary>

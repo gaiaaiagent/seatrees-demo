@@ -19,8 +19,8 @@ interface MonitoringTimelineProps {
 
 const METRIC_CONFIG: Record<string, { color: string; label: string; yAxisId: string }> = {
   survival_rate: { color: '#10B981', label: 'Survival Rate', yAxisId: 'left' },
-  canopy_cover: { color: '#06B6D4', label: 'Canopy Cover', yAxisId: 'right' },
-  invertebrate_density: { color: '#F59E0B', label: 'Invertebrate Density', yAxisId: 'right' },
+  canopy_cover: { color: '#0e7490', label: 'Canopy Cover', yAxisId: 'right' },
+  invertebrate_density: { color: '#d97706', label: 'Invertebrate Density', yAxisId: 'right' },
 }
 
 function formatDate(iso: string): string {
@@ -74,8 +74,8 @@ function CustomTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="glass-card rounded-lg px-3 py-2 text-xs space-y-1">
-      <p className="text-muted-foreground font-medium">{label}</p>
+    <div className="rounded-lg bg-[var(--st-card)] border border-[var(--st-border)] px-3 py-2 text-xs shadow-lg space-y-1">
+      <p className="text-[var(--st-text-muted)] font-medium">{label}</p>
       {payload.map((entry) => {
         const cfg = METRIC_CONFIG[entry.dataKey]
         const val =
@@ -98,14 +98,14 @@ export function MonitoringTimeline({ data }: MonitoringTimelineProps) {
 
   if (chartData.length === 0) {
     return (
-      <Card>
+      <Card className="shadow-[var(--shadow-card)]">
         <CardHeader>
-          <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
+          <CardTitle className="text-sm uppercase tracking-wide text-[var(--st-text-muted)]">
             BACI Monitoring
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground text-center py-8">
+          <p className="text-sm text-[var(--st-text-muted)] text-center py-8">
             No monitoring data available yet.
           </p>
         </CardContent>
@@ -114,26 +114,26 @@ export function MonitoringTimeline({ data }: MonitoringTimelineProps) {
   }
 
   return (
-    <Card>
+    <Card className="shadow-[var(--shadow-card)]">
       <CardHeader>
-        <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
+        <CardTitle className="text-sm uppercase tracking-wide text-[var(--st-text-muted)]">
           BACI Monitoring
         </CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 8%)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#dbe5ec" />
             <XAxis
               dataKey="date"
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
-              axisLine={{ stroke: 'oklch(1 0 0 / 10%)' }}
+              tick={{ fill: '#6b7f93', fontSize: 12 }}
+              axisLine={{ stroke: '#dbe5ec' }}
               tickLine={false}
             />
             <YAxis
               yAxisId="left"
               tickFormatter={(v: number) => `${(v * 100).toFixed(0)}%`}
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
+              tick={{ fill: '#6b7f93', fontSize: 12 }}
               axisLine={false}
               tickLine={false}
               domain={[0, 1]}
@@ -142,14 +142,14 @@ export function MonitoringTimeline({ data }: MonitoringTimelineProps) {
               <YAxis
                 yAxisId="right"
                 orientation="right"
-                tick={{ fill: '#94A3B8', fontSize: 12 }}
+                tick={{ fill: '#6b7f93', fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
               />
             )}
             <Tooltip content={<CustomTooltip />} />
             <Legend
-              wrapperStyle={{ fontSize: 12, color: '#94A3B8' }}
+              wrapperStyle={{ fontSize: 12, color: '#6b7f93' }}
               formatter={(value: string) => METRIC_CONFIG[value]?.label ?? value}
             />
             {metricTypes.map((type) => {
@@ -160,9 +160,9 @@ export function MonitoringTimeline({ data }: MonitoringTimelineProps) {
                   type="monotone"
                   dataKey={type}
                   yAxisId={cfg?.yAxisId ?? 'right'}
-                  stroke={cfg?.color ?? '#94A3B8'}
+                  stroke={cfg?.color ?? '#6b7f93'}
                   strokeWidth={2}
-                  dot={{ r: 3, fill: cfg?.color ?? '#94A3B8' }}
+                  dot={{ r: 3, fill: cfg?.color ?? '#6b7f93' }}
                   activeDot={{ r: 5 }}
                   connectNulls
                 />

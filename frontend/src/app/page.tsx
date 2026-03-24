@@ -9,7 +9,18 @@ import {
   Globe,
   Shield,
   BookOpen,
+  PlayCircle,
+  Sun,
+  Moon,
+  Database,
+  Map,
+  Sparkles,
+  LinkIcon,
+  Cpu,
+  Rocket,
 } from 'lucide-react'
+import { useTheme } from '@/components/shared/ThemeProvider'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 function useCountUpOnView(end: number, duration = 1200) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -69,11 +80,20 @@ const stats = [
 ]
 
 export default function LandingPage() {
+  const { theme, toggle: toggleTheme } = useTheme()
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--st-bg)] text-[var(--st-text)] overflow-x-hidden">
       {/* Hero */}
       <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,oklch(0.3_0.1_200)_0%,transparent_70%)] opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--st-primary)]/5 via-transparent to-transparent" />
+        <button
+          onClick={toggleTheme}
+          className="absolute top-6 right-6 z-20 flex size-9 items-center justify-center rounded-lg border border-[var(--st-border)] bg-[var(--st-card)] text-[var(--st-text-muted)] shadow-sm transition-colors hover:text-[var(--st-text)]"
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? <Moon className="size-4" /> : <Sun className="size-4" />}
+        </button>
         <motion.div
           className="relative z-10 flex flex-col items-center gap-6 max-w-3xl"
           initial="hidden"
@@ -81,10 +101,12 @@ export default function LandingPage() {
           variants={stagger}
         >
           <motion.div variants={fadeUp} transition={{ type: 'spring', stiffness: 80, damping: 20 }}>
-            <Waves className="h-16 w-16 text-primary" />
+            <div className="flex size-20 items-center justify-center rounded-2xl bg-[var(--st-primary)] shadow-lg">
+              <Waves className="h-10 w-10 text-white" />
+            </div>
           </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[var(--st-text)]">
             {['SeaTrees'].map((word, i) => (
               <motion.span
                 key={word}
@@ -103,7 +125,7 @@ export default function LandingPage() {
           </h1>
 
           <motion.p
-            className="text-lg text-muted-foreground max-w-xl"
+            className="text-lg text-[var(--st-text-muted)] max-w-xl"
             variants={fadeUp}
             transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.4 }}
           >
@@ -111,12 +133,12 @@ export default function LandingPage() {
           </motion.p>
 
           <motion.p
-            className="text-sm text-muted-foreground max-w-lg"
+            className="text-sm text-[var(--st-text-muted)] max-w-lg"
             variants={fadeUp}
             transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.5 }}
           >
             Track marine conservation projects, verify carbon credits on-chain,
-            and generate impact stories -- all powered by Regen Network.
+            and generate impact stories — all powered by Regen Network.
           </motion.p>
 
           <motion.div
@@ -126,10 +148,21 @@ export default function LandingPage() {
           >
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg hover:shadow-[0_0_24px_rgba(6,182,212,0.3)] hover:brightness-110 transition-all"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--st-primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:brightness-110 transition-all"
             >
               Launch Dashboard
               <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/dashboard"
+              onClick={() => {
+                // Clear tour flag so it auto-starts
+                localStorage.removeItem('seatrees-tour-completed')
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-[var(--st-border)] bg-[var(--st-card)] px-6 py-3 text-sm font-semibold text-[var(--st-primary)] shadow-sm hover:shadow-md transition-all"
+            >
+              <PlayCircle className="h-4 w-4" />
+              Start Tour
             </Link>
           </motion.div>
         </motion.div>
@@ -138,7 +171,7 @@ export default function LandingPage() {
       {/* Stats Row */}
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map(({ value, label, suffix }) => (
               <StatCard key={label} value={value} label={label} suffix={suffix} />
             ))}
@@ -146,37 +179,102 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Feature Cards */}
+      {/* Intro Tabs */}
       <section className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <motion.h2
-            className="text-2xl font-bold text-center mb-12"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
           >
-            Platform Capabilities
-          </motion.h2>
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-3 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-          >
-            {features.map(({ icon: Icon, title, description }) => (
-              <motion.div
-                key={title}
-                className="glass-card group relative rounded-xl p-6 transition-shadow hover:shadow-[0_0_24px_rgba(6,182,212,0.15)]"
-                variants={fadeUp}
-                transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-              >
-                <Icon className="h-8 w-8 text-primary mb-4" />
-                <h3 className="font-semibold mb-2">{title}</h3>
-                <p className="text-sm text-muted-foreground">{description}</p>
-              </motion.div>
-            ))}
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList variant="line" className="mx-auto mb-10 justify-center">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="how">How It Works</TabsTrigger>
+                <TabsTrigger value="tech">Tech Stack</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview">
+                <p className="text-center text-sm text-[var(--st-text-muted)] max-w-2xl mx-auto mb-10">
+                  SeaTrees brings marine conservation data, blockchain verification, and impact storytelling into one intelligence platform.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {features.map(({ icon: Icon, title, description }) => (
+                    <div
+                      key={title}
+                      className="group relative rounded-xl bg-[var(--st-card)] p-6 shadow-[var(--shadow-card)] border border-[var(--st-border)] transition-shadow hover:shadow-[var(--shadow-card-hover)]"
+                    >
+                      <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--st-primary-pale)] mb-4">
+                        <Icon className="h-5 w-5 text-[var(--st-primary)]" />
+                      </div>
+                      <h3 className="font-semibold mb-2 text-[var(--st-text)]">{title}</h3>
+                      <p className="text-sm text-[var(--st-text-muted)]">{description}</p>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="how">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {[
+                    {
+                      step: 1,
+                      icon: Database,
+                      title: 'Data Collection',
+                      description: 'Real-time monitoring from 24 sites across 6 marine ecosystems — mangroves, kelp, coral, seagrass, watersheds, and shellfish reefs.',
+                    },
+                    {
+                      step: 2,
+                      icon: LinkIcon,
+                      title: 'On-Chain Verification',
+                      description: 'Biodiversity credits issued and retired on Regen Network, with full attestation chains and batch-level traceability.',
+                    },
+                    {
+                      step: 3,
+                      icon: Cpu,
+                      title: 'Intelligence Dashboard',
+                      description: 'Real-time portfolio insights, market analytics, and AI-generated impact stories — all in one platform.',
+                    },
+                  ].map(({ step, icon: Icon, title, description }) => (
+                    <div
+                      key={step}
+                      className="relative rounded-xl bg-[var(--st-card)] p-6 shadow-[var(--shadow-card)] border border-[var(--st-border)]"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="flex size-8 items-center justify-center rounded-full bg-[var(--st-primary)] text-sm font-bold text-white">
+                          {step}
+                        </span>
+                        <Icon className="h-5 w-5 text-[var(--st-primary)]" />
+                      </div>
+                      <h3 className="font-semibold mb-2 text-[var(--st-text)]">{title}</h3>
+                      <p className="text-sm text-[var(--st-text-muted)]">{description}</p>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="tech">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                  {[
+                    { name: 'Regen Network', icon: Globe },
+                    { name: 'Next.js', icon: Rocket },
+                    { name: 'PostgreSQL', icon: Database },
+                    { name: 'MapLibre', icon: Map },
+                    { name: 'Framer Motion', icon: Sparkles },
+                    { name: 'Vercel', icon: ArrowRight },
+                  ].map(({ name, icon: Icon }) => (
+                    <div
+                      key={name}
+                      className="flex flex-col items-center gap-2 rounded-xl bg-[var(--st-card)] p-4 shadow-[var(--shadow-card)] border border-[var(--st-border)]"
+                    >
+                      <Icon className="h-6 w-6 text-[var(--st-primary)]" />
+                      <span className="text-xs font-medium text-[var(--st-text)]">{name}</span>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
           </motion.div>
         </div>
       </section>
@@ -184,13 +282,13 @@ export default function LandingPage() {
       {/* Footer */}
       <section className="py-16 px-6 text-center">
         <motion.div
-          className="flex items-center justify-center gap-2 text-xs text-muted-foreground"
+          className="flex items-center justify-center gap-2 text-xs text-[var(--st-text-muted)]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <Waves className="h-4 w-4 text-primary" />
+          <Waves className="h-4 w-4 text-[var(--st-primary)]" />
           Powered by Regen Network
         </motion.div>
       </section>
@@ -203,16 +301,16 @@ function StatCard({ value, label, suffix }: { value: number; label: string; suff
 
   return (
     <motion.div
-      className="glass-card flex flex-col items-center gap-1 rounded-xl p-6"
+      className="flex flex-col items-center gap-1 rounded-xl bg-[var(--st-card)] p-6 shadow-[var(--shadow-card)] border border-[var(--st-border)]"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ type: 'spring', stiffness: 80, damping: 20 }}
     >
-      <span ref={ref} className="text-4xl font-bold text-primary">
+      <span ref={ref} className="text-4xl font-bold text-[var(--st-primary)]">
         {inView ? animatedValue.toLocaleString() : 0}{suffix}
       </span>
-      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="text-sm text-[var(--st-text-muted)]">{label}</span>
     </motion.div>
   )
 }

@@ -48,7 +48,6 @@ function useCountUp(target: number, duration = 1200) {
     function tick(now: number) {
       const elapsed = now - start
       const progress = Math.min(elapsed / duration, 1)
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       setValue(Math.round(eased * target))
       if (progress < 1) {
@@ -97,26 +96,26 @@ export function LiveQueryPanel() {
   }, [activeQuery])
 
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-card)] overflow-hidden shadow-[var(--shadow-card)]">
       {/* Terminal query box */}
-      <div className="bg-[#050d1a] p-5 border-b border-white/5">
+      <div className="bg-[#1a2b3d] p-5 border-b border-[#2a3b4d]">
         <div className="flex items-center gap-2 mb-3">
           <div className="size-3 rounded-full bg-red-500/70" />
           <div className="size-3 rounded-full bg-amber-500/70" />
           <div className="size-3 rounded-full bg-emerald-500/70" />
-          <span className="ml-2 text-xs text-muted-foreground font-mono">regen-query</span>
+          <span className="ml-2 text-xs text-gray-400 font-mono">regen-query</span>
         </div>
 
-        <div className="font-mono text-sm text-foreground/90 leading-relaxed">
-          <span className="text-primary">$</span>{' '}
-          <span className="text-foreground/70">{QUERIES[activeQuery].display}</span>
+        <div className="font-mono text-sm text-gray-200 leading-relaxed">
+          <span className="text-cyan-400">$</span>{' '}
+          <span className="text-gray-300">{QUERIES[activeQuery].display}</span>
         </div>
 
         <div className="flex items-center gap-3 mt-4">
           <Button
             onClick={() => handleQuery()}
             disabled={loading}
-            className={`gap-2 ${!loading ? 'pulse-glow' : ''}`}
+            className="gap-2"
           >
             <Search className="size-4" />
             {loading ? 'Querying...' : 'Query Ledger'}
@@ -127,7 +126,7 @@ export function LiveQueryPanel() {
               variant="outline"
               size="sm"
               onClick={() => setShowQueries(!showQueries)}
-              className="gap-1 text-xs"
+              className="gap-1 text-xs bg-[var(--st-card)]/10 border-white/20 text-white hover:bg-[var(--st-card)]/20 hover:text-white"
             >
               Other queries
               <ChevronDown className={`size-3 transition-transform ${showQueries ? 'rotate-180' : ''}`} />
@@ -140,7 +139,7 @@ export function LiveQueryPanel() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 mt-1 z-10 min-w-[260px] rounded-md border bg-popover p-1 shadow-lg"
+                  className="absolute top-full left-0 mt-1 z-10 min-w-[260px] rounded-md border border-[var(--st-border)] bg-[var(--st-card)] p-1 shadow-lg"
                 >
                   {(Object.keys(QUERIES) as QueryKey[]).map((key) => (
                     <button
@@ -149,8 +148,8 @@ export function LiveQueryPanel() {
                         setShowQueries(false)
                         handleQuery(key)
                       }}
-                      className={`w-full text-left text-xs px-3 py-2 rounded hover:bg-accent transition-colors ${
-                        key === activeQuery ? 'text-primary' : 'text-foreground/80'
+                      className={`w-full text-left text-xs px-3 py-2 rounded hover:bg-[var(--st-primary-pale)] transition-colors ${
+                        key === activeQuery ? 'text-[var(--st-primary)]' : 'text-[var(--st-text)]'
                       }`}
                     >
                       {QUERIES[key].label}
@@ -172,23 +171,23 @@ export function LiveQueryPanel() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-3 text-muted-foreground"
+              className="flex items-center gap-3 text-[var(--st-text-muted)]"
             >
               <div className="flex gap-1">
                 <motion.span
                   animate={{ opacity: [0.2, 1, 0.2] }}
                   transition={{ repeat: Infinity, duration: 1.2, delay: 0 }}
-                  className="size-2 rounded-full bg-primary"
+                  className="size-2 rounded-full bg-[var(--st-primary)]"
                 />
                 <motion.span
                   animate={{ opacity: [0.2, 1, 0.2] }}
                   transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }}
-                  className="size-2 rounded-full bg-primary"
+                  className="size-2 rounded-full bg-[var(--st-primary)]"
                 />
                 <motion.span
                   animate={{ opacity: [0.2, 1, 0.2] }}
                   transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }}
-                  className="size-2 rounded-full bg-primary"
+                  className="size-2 rounded-full bg-[var(--st-primary)]"
                 />
               </div>
               <span className="text-sm">Querying Regen Network ledger...</span>
@@ -229,7 +228,7 @@ export function LiveQueryPanel() {
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-sm text-muted-foreground"
+              className="text-sm text-[var(--st-text-muted)]"
             >
               Click &quot;Query Ledger&quot; to fetch live data from the Regen Network blockchain.
             </motion.p>
@@ -246,14 +245,14 @@ function RetirementResult({ data, queriedAt }: { data: RetirementResponse; queri
     <div className="space-y-4">
       <div className="flex items-end gap-6">
         <div>
-          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Credits Retired</p>
-          <p className="text-4xl font-bold font-mono tabular-nums text-primary">
+          <p className="text-xs text-[var(--st-text-muted)] mb-1 uppercase tracking-wide">Credits Retired</p>
+          <p className="text-4xl font-bold font-mono tabular-nums text-[var(--st-primary)]">
             {new Intl.NumberFormat().format(animatedRetired)}
           </p>
         </div>
         <div>
-          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Total Issued</p>
-          <p className="text-lg font-mono tabular-nums text-foreground/70">
+          <p className="text-xs text-[var(--st-text-muted)] mb-1 uppercase tracking-wide">Total Issued</p>
+          <p className="text-lg font-mono tabular-nums text-[var(--st-text)]">
             {new Intl.NumberFormat().format(data.total_issued)}
           </p>
         </div>
@@ -273,20 +272,20 @@ function SupplyResult({ data, queriedAt }: { data: RetirementResponse; queriedAt
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-6">
         <div>
-          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Issued</p>
-          <p className="text-2xl font-bold font-mono tabular-nums">
+          <p className="text-xs text-[var(--st-text-muted)] mb-1 uppercase tracking-wide">Issued</p>
+          <p className="text-2xl font-bold font-mono tabular-nums text-[var(--st-text)]">
             {new Intl.NumberFormat().format(animatedIssued)}
           </p>
         </div>
         <div>
-          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Retired</p>
-          <p className="text-2xl font-bold font-mono tabular-nums text-primary">
+          <p className="text-xs text-[var(--st-text-muted)] mb-1 uppercase tracking-wide">Retired</p>
+          <p className="text-2xl font-bold font-mono tabular-nums text-[var(--st-primary)]">
             {new Intl.NumberFormat().format(animatedRetired)}
           </p>
         </div>
         <div>
-          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Tradeable</p>
-          <p className="text-2xl font-bold font-mono tabular-nums text-amber-400">
+          <p className="text-xs text-[var(--st-text-muted)] mb-1 uppercase tracking-wide">Tradeable</p>
+          <p className="text-2xl font-bold font-mono tabular-nums text-amber-600">
             {new Intl.NumberFormat().format(animatedTradeable)}
           </p>
         </div>
@@ -302,7 +301,7 @@ function BatchResult({ data, queriedAt }: { data: BatchResponse; queriedAt: Date
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs text-muted-foreground uppercase tracking-wide border-b border-white/5">
+            <tr className="text-xs text-[var(--st-text-muted)] uppercase tracking-wide border-b border-[var(--st-border)]">
               <th className="text-left py-2 pr-4">Batch Denom</th>
               <th className="text-right py-2 px-4">Issued</th>
               <th className="text-right py-2 pl-4">Retired</th>
@@ -310,16 +309,16 @@ function BatchResult({ data, queriedAt }: { data: BatchResponse; queriedAt: Date
           </thead>
           <tbody>
             {data.batches.map((batch) => (
-              <tr key={batch.batch_denom} className="border-b border-white/5 last:border-0">
-                <td className="py-2 pr-4 font-mono text-xs">
+              <tr key={batch.batch_denom} className="border-b border-[var(--st-border)] last:border-0">
+                <td className="py-2 pr-4 font-mono text-xs text-[var(--st-text)]">
                   {batch.batch_denom.length > 40
                     ? `${batch.batch_denom.slice(0, 18)}...${batch.batch_denom.slice(-14)}`
                     : batch.batch_denom}
                 </td>
-                <td className="text-right py-2 px-4 font-mono">
+                <td className="text-right py-2 px-4 font-mono text-[var(--st-text)]">
                   {new Intl.NumberFormat().format(batch.total_issued)}
                 </td>
-                <td className="text-right py-2 pl-4 font-mono text-primary">
+                <td className="text-right py-2 pl-4 font-mono text-[var(--st-primary)]">
                   {new Intl.NumberFormat().format(batch.total_retired)}
                 </td>
               </tr>
@@ -339,18 +338,18 @@ function SourceMeta({ source, queriedAt }: { source: 'live' | 'cached'; queriedA
         variant="secondary"
         className={
           source === 'live'
-            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 gap-1.5'
-            : 'bg-amber-500/20 text-amber-400 border-amber-500/30 gap-1.5'
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 gap-1.5'
+            : 'bg-amber-50 text-amber-700 border-amber-200 gap-1.5'
         }
       >
         <span
           className={`size-1.5 rounded-full ${
-            source === 'live' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+            source === 'live' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
           }`}
         />
         {source === 'live' ? 'Live' : 'Cached'}
       </Badge>
-      <span className="text-xs text-muted-foreground font-mono">
+      <span className="text-xs text-[var(--st-text-muted)] font-mono">
         {queriedAt.toLocaleTimeString()}
       </span>
     </div>

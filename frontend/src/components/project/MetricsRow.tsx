@@ -78,12 +78,12 @@ export function MetricsRow({ project }: MetricsRowProps) {
           <motion.div
             key={card.label}
             variants={itemVariants}
-            className="glass-card rounded-xl p-4 relative"
+            className="rounded-xl bg-[var(--st-card)] p-4 relative shadow-[var(--shadow-card)] border border-[var(--st-border)]"
             style={{ borderTop: `2px solid ${project.ecosystem_color}` }}
           >
-            <Icon className="size-4 text-muted-foreground absolute top-4 right-4" />
-            <p className="text-primary text-3xl font-bold font-mono">{card.value}</p>
-            <p className="text-muted-foreground text-sm mt-1">{card.label}</p>
+            <Icon className="size-4 text-[var(--st-text-muted)] absolute top-4 right-4" />
+            <p className="text-[var(--st-primary)] text-3xl font-bold font-mono">{card.value}</p>
+            <p className="text-[var(--st-text-muted)] text-sm mt-1">{card.label}</p>
           </motion.div>
         )
       })}

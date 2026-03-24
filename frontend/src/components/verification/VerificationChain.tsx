@@ -29,7 +29,7 @@ function ChainRow({ group }: { group: VerificationGroup }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <p className="text-sm font-semibold">{group.project_name}</p>
+        <p className="text-sm font-semibold text-[var(--st-text)]">{group.project_name}</p>
         <Badge variant="secondary" className="font-mono text-[10px]">
           {group.batch_denom.length > 24
             ? `${group.batch_denom.slice(0, 12)}...${group.batch_denom.slice(-8)}`
@@ -56,36 +56,36 @@ function ChainRow({ group }: { group: VerificationGroup }) {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.15, duration: 0.35 }}
-                  className="glass-card rounded-lg p-3 flex-1 min-w-[130px]"
+                  className="rounded-lg p-3 flex-1 min-w-[130px] bg-[var(--st-card)] border border-[var(--st-border)] shadow-[var(--shadow-card)]"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="size-7 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Icon className="size-3.5 text-primary" />
+                    <div className="size-7 rounded-full bg-[var(--st-primary-pale)] flex items-center justify-center">
+                      <Icon className="size-3.5 text-[var(--st-primary)]" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold">{meta.label}</p>
+                      <p className="text-xs font-semibold text-[var(--st-text)]">{meta.label}</p>
                       <Badge variant="secondary" className="text-[9px] px-1 py-0">
                         {meta.roleLabel}
                       </Badge>
                     </div>
                   </div>
 
-                  <p className="text-xs font-medium">{step.party_name}</p>
+                  <p className="text-xs font-medium text-[var(--st-text)]">{step.party_name}</p>
 
                   <div className="mt-2 space-y-1">
                     <div>
-                      <p className="text-[9px] text-muted-foreground uppercase tracking-wide">
+                      <p className="text-[9px] text-[var(--st-text-muted)] uppercase tracking-wide">
                         Attestation
                       </p>
-                      <p className="font-mono text-[10px] text-foreground/60" title={step.attestation_hash}>
+                      <p className="font-mono text-[10px] text-[var(--st-text-muted)]" title={step.attestation_hash}>
                         {truncHash}
                       </p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-muted-foreground uppercase tracking-wide">
+                      <p className="text-[9px] text-[var(--st-text-muted)] uppercase tracking-wide">
                         Timestamp
                       </p>
-                      <p className="text-[10px] text-foreground/60">
+                      <p className="text-[10px] text-[var(--st-text-muted)]">
                         {date.toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -103,11 +103,11 @@ function ChainRow({ group }: { group: VerificationGroup }) {
                     transition={{ delay: i * 0.15 + 0.2, duration: 0.25 }}
                     className="flex flex-col items-center justify-center px-1.5 pt-5 shrink-0"
                   >
-                    <div className="w-4 h-px bg-primary/40" />
-                    <div className="size-4 rounded-full bg-primary/20 flex items-center justify-center my-0.5">
-                      <Check className="size-2.5 text-primary" />
+                    <div className="w-4 h-px bg-[var(--st-primary)]/40" />
+                    <div className="size-4 rounded-full bg-[var(--st-primary-pale)] flex items-center justify-center my-0.5">
+                      <Check className="size-2.5 text-[var(--st-primary)]" />
                     </div>
-                    <div className="w-4 h-px bg-primary/40" />
+                    <div className="w-4 h-px bg-[var(--st-primary)]/40" />
                   </motion.div>
                 )}
               </div>
@@ -122,7 +122,7 @@ function ChainRow({ group }: { group: VerificationGroup }) {
 export function VerificationChain({ groups }: VerificationChainProps) {
   if (groups.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground text-center py-8">
+      <p className="text-sm text-[var(--st-text-muted)] text-center py-8">
         No verification data available.
       </p>
     )

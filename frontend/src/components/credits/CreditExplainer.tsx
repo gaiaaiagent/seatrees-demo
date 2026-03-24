@@ -6,29 +6,29 @@ import { Sprout, Shield, CheckCircle, Lock } from 'lucide-react'
 const STEPS = [
   {
     icon: Sprout,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-400/10',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
     title: 'Plant',
     description: 'Fund the planting of one mangrove seedling',
   },
   {
     icon: Shield,
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-400/10',
+    color: 'text-cyan-600',
+    bg: 'bg-cyan-50',
     title: 'Protect',
     description: '10 years of stewardship and monitoring',
   },
   {
     icon: CheckCircle,
-    color: 'text-amber-400',
-    bg: 'bg-amber-400/10',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50',
     title: 'Verify',
     description: 'Third-party verification + satellite analysis',
   },
   {
     icon: Lock,
-    color: 'text-primary',
-    bg: 'bg-primary/10',
+    color: 'text-[var(--st-primary)]',
+    bg: 'bg-[var(--st-primary-pale)]',
     title: 'Retire',
     description: 'Permanently retired on Regen Network blockchain',
   },
@@ -50,8 +50,8 @@ export function CreditExplainer() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold">What is 1 Biodiversity Block?</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h2 className="text-lg font-semibold text-[var(--st-text)]">What is 1 Biodiversity Block?</h2>
+        <p className="text-sm text-[var(--st-text-muted)] mt-1">
           From seedling to permanent ledger entry in four steps
         </p>
       </div>
@@ -67,21 +67,20 @@ export function CreditExplainer() {
           const Icon = step.icon
           return (
             <motion.div key={step.title} variants={item} className="relative">
-              <div className="glass-card rounded-xl p-5 h-full flex flex-col items-center text-center gap-3">
+              <div className="rounded-xl bg-[var(--st-card)] p-5 h-full flex flex-col items-center text-center gap-3 shadow-[var(--shadow-card)] border border-[var(--st-border)]">
                 <div className={`${step.bg} rounded-full p-3`}>
                   <Icon className={`size-6 ${step.color}`} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">{step.title}</p>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  <p className="text-sm font-semibold text-[var(--st-text)]">{step.title}</p>
+                  <p className="text-xs text-[var(--st-text-muted)] mt-1 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
               </div>
 
-              {/* Connector arrow (hidden on last item and on small screens) */}
               {i < STEPS.length - 1 && (
-                <div className="hidden lg:flex absolute top-1/2 -right-3 -translate-y-1/2 text-muted-foreground/40">
+                <div className="hidden lg:flex absolute top-1/2 -right-3 -translate-y-1/2 text-[var(--st-text-muted)]/40">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path d="M1 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -93,10 +92,10 @@ export function CreditExplainer() {
       </motion.div>
 
       {/* Key callout */}
-      <div className="glass-card rounded-xl border-primary/30 border p-4 flex items-start gap-3">
-        <Lock className="size-5 text-primary shrink-0 mt-0.5" />
-        <p className="text-sm leading-relaxed">
-          <span className="font-semibold text-primary">All Biodiversity Blocks are retired immediately upon purchase</span>{' '}
+      <div className="rounded-xl border border-[var(--st-primary)]/30 bg-[var(--st-primary-pale)] p-4 flex items-start gap-3">
+        <Lock className="size-5 text-[var(--st-primary)] shrink-0 mt-0.5" />
+        <p className="text-sm leading-relaxed text-[var(--st-text)]">
+          <span className="font-semibold text-[var(--st-primary)]">All Biodiversity Blocks are retired immediately upon purchase</span>{' '}
           — no secondary market, no trading, no speculation.
         </p>
       </div>

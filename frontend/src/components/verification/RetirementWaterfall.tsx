@@ -21,22 +21,22 @@ export function RetirementWaterfall({
       label: 'Total Issued',
       value: totalIssued,
       pct: 100,
-      color: 'bg-muted-foreground/20 border border-muted-foreground/30',
-      textColor: 'text-foreground/70',
+      color: 'bg-muted border border-border',
+      textColor: 'text-[var(--st-text)]',
     },
     {
       label: 'Total Retired',
       value: totalRetired,
       pct: retiredPct,
-      color: 'bg-primary/30 border border-primary/50',
-      textColor: 'text-primary',
+      color: 'bg-[var(--st-primary)]/20 border border-[var(--st-primary)]/40',
+      textColor: 'text-[var(--st-primary)]',
     },
     {
       label: 'Tradeable',
       value: totalTradeable,
       pct: tradeablePct,
-      color: 'bg-amber-500/20 border border-amber-500/40',
-      textColor: 'text-amber-400',
+      color: 'bg-amber-100 border border-amber-300',
+      textColor: 'text-amber-600',
     },
   ]
 
@@ -45,15 +45,15 @@ export function RetirementWaterfall({
       {bars.map((bar, i) => (
         <div key={bar.label}>
           <div className="flex items-baseline justify-between mb-1.5">
-            <span className="text-xs text-muted-foreground">{bar.label}</span>
+            <span className="text-xs text-[var(--st-text-muted)]">{bar.label}</span>
             <span className={`text-xs font-mono ${bar.textColor}`}>
               {new Intl.NumberFormat().format(bar.value)}
-              <span className="text-muted-foreground ml-1">
+              <span className="text-[var(--st-text-muted)] ml-1">
                 ({bar.pct.toFixed(1)}%)
               </span>
             </span>
           </div>
-          <div className="h-7 w-full rounded-md bg-muted/30 overflow-hidden">
+          <div className="h-7 w-full rounded-md bg-muted overflow-hidden border border-[var(--st-border)]">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${Math.max(bar.pct, bar.value > 0 ? 2 : 0)}%` }}
@@ -64,7 +64,7 @@ export function RetirementWaterfall({
         </div>
       ))}
 
-      <p className="text-xs text-muted-foreground/70 italic pt-1 leading-relaxed">
+      <p className="text-xs text-[var(--st-text-muted)]/70 italic pt-1 leading-relaxed">
         All SeaTrees credits are retired immediately upon purchase — no secondary market.
       </p>
     </div>

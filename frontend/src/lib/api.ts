@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 const TIMEOUT_MS = 10_000;
 const RETRY_DELAY_MS = 2_000;

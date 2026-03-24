@@ -29,17 +29,17 @@ export default function StoriesPage() {
 
   if (!stories) {
     return (
-      <div className="space-y-6 p-6">
+      <div className="space-y-4 p-4">
         <div>
-          <div className="h-8 w-48 rounded skeleton-shimmer" />
-          <div className="h-5 w-80 rounded skeleton-shimmer mt-2" />
+          <div className="h-8 w-48 rounded animate-pulse bg-[var(--st-card)] border border-[var(--st-border)]" />
+          <div className="h-5 w-80 rounded animate-pulse bg-[var(--st-card)] border border-[var(--st-border)] mt-2" />
         </div>
-        <div className="h-9 w-96 rounded skeleton-shimmer" />
+        <div className="h-9 w-96 rounded animate-pulse bg-[var(--st-card)] border border-[var(--st-border)]" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="h-48 rounded-xl skeleton-shimmer"
+              className="h-48 rounded-xl animate-pulse bg-[var(--st-card)] border border-[var(--st-border)]"
             />
           ))}
         </div>
@@ -49,7 +49,7 @@ export default function StoriesPage() {
 
   return (
     <PageTransition>
-      <div className="space-y-6 p-6">
+      <div className="space-y-4 p-4">
         <div>
           <h1 className="text-2xl font-semibold">Impact Stories</h1>
           <p className="text-muted-foreground mt-1">

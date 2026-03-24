@@ -1,5 +1,7 @@
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Header } from "@/components/shared/Header";
+import { TourProvider } from "@/components/tour/TourProvider";
+import { DemoModeProvider } from "@/components/demo/DemoModeProvider";
 
 export default function AppLayout({
   children,
@@ -7,12 +9,16 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
-    </div>
+    <DemoModeProvider>
+      <TourProvider>
+        <div className="flex h-screen overflow-hidden bg-[var(--st-bg)]">
+          <Sidebar />
+          <div className="flex flex-1 flex-col overflow-hidden">
+            <Header />
+            <main className="flex-1 overflow-y-auto bg-[var(--st-bg)]">{children}</main>
+          </div>
+        </div>
+      </TourProvider>
+    </DemoModeProvider>
   );
 }
