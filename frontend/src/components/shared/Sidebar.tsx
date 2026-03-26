@@ -14,7 +14,7 @@ import {
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", tourId: "nav-dashboard" },
-  { label: "Projects", icon: MapPin, path: "/project/marereni-kenya", tourId: "nav-projects" },
+  { label: "Projects", icon: MapPin, path: "/dashboard", tourId: "nav-projects" },
   { label: "Credits", icon: Shield, path: "/credits", tourId: "nav-credits" },
   { label: "Verification", icon: CheckCircle, path: "/verification", tourId: "nav-verification" },
   { label: "Stories", icon: BookOpen, path: "/stories", tourId: "nav-stories" },
@@ -51,7 +51,7 @@ export function Sidebar() {
         {navItems.map(({ label, icon: Icon, path, tourId }) => {
           const isActive =
             pathname === path || pathname.startsWith(path + "/") ||
-            (path === "/project/marereni-kenya" && pathname.startsWith("/project/"));
+            (path === "/dashboard" && pathname.startsWith("/project/"));
 
           return (
             <Link

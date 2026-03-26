@@ -3,9 +3,8 @@
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Eye, Sun, Moon } from "lucide-react";
+import { RotateCcw, Sun, Moon } from "lucide-react";
 import { useTour } from "@/lib/tour";
-import { useDemoMode } from "@/components/demo/DemoModeProvider";
 import { useTheme } from "@/components/shared/ThemeProvider";
 
 const pageTitles: Record<string, string> = {
@@ -21,7 +20,6 @@ export function Header() {
     pageTitles[pathname] ??
     (pathname.startsWith("/project/") ? "Project Deep Dive" : "Portfolio Dashboard");
   const { restart } = useTour();
-  const { enabled, toggle } = useDemoMode();
   const { theme, toggle: toggleTheme } = useTheme();
 
   return (
@@ -46,17 +44,6 @@ export function Header() {
         >
           <RotateCcw className="size-3" />
           Tour
-        </Button>
-
-        <Button
-          variant={enabled ? "default" : "outline"}
-          size="sm"
-          onClick={toggle}
-          data-tour="demo-toggle"
-          className="gap-1.5 text-xs"
-        >
-          <Eye className="size-3" />
-          Demo Mode
         </Button>
 
         <div className="flex items-center gap-1.5 text-xs text-[var(--st-text-muted)]">

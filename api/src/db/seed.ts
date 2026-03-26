@@ -25,12 +25,20 @@ function randomDate(startDate: Date, endDate: Date): Date {
   return new Date(startDate.getTime() + seededRandom() * diff);
 }
 
-function randomHex64(): string {
-  let hex = '0x';
-  for (let i = 0; i < 64; i++) {
-    hex += Math.floor(seededRandom() * 16).toString(16);
+function deterministicHash(input: string): string {
+  // Generate a deterministic SHA-256-like hash from input string
+  // Uses seeded random for reproducibility, but tied to verification record fields
+  let hash = '';
+  let h = 0;
+  for (let i = 0; i < input.length; i++) {
+    h = ((h << 5) - h + input.charCodeAt(i)) | 0;
   }
-  return hex;
+  // Use the hash of input to seed 64 hex chars
+  for (let i = 0; i < 64; i++) {
+    h = ((h << 5) - h + i) | 0;
+    hash += (Math.abs(h) % 16).toString(16);
+  }
+  return hash;
 }
 
 // ============================================================
@@ -73,7 +81,7 @@ interface ProjectDef {
 const PROJECTS: ProjectDef[] = [
   { name: 'Marereni, Kenya', slug: 'marereni-kenya', ecosystem_slug: 'mangrove', region: 'Kilifi County', country: 'Kenya', partner: 'COBEC', lat: -2.98, lng: 40.22, trees_planted: 190000, survival_rate: 0.80, species_count: 4, hectares: 120, year_started: 2022, status: 'active', description: 'Flagship mangrove restoration project in partnership with COBEC (Community Based Environmental Conservation) in the Marereni coastal region of Kenya.' },
   { name: 'Lamu, Kenya', slug: 'lamu-kenya', ecosystem_slug: 'mangrove', region: 'Lamu County', country: 'Kenya', partner: 'KFS', lat: -2.27, lng: 40.90, trees_planted: 45000, survival_rate: 0.75, species_count: 3, hectares: 35, year_started: 2023, status: 'active', description: 'Mangrove restoration in the Lamu archipelago working with Kenya Forest Service.' },
-  { name: 'Mikoko Pamoja, Kenya', slug: 'mikoko-pamoja-kenya', ecosystem_slug: 'mangrove', region: 'Kwale County', country: 'Kenya', partner: 'KMFRI', lat: -4.42, lng: 39.50, trees_planted: 120000, survival_rate: 0.82, species_count: 5, hectares: 85, year_started: 2021, status: 'active', description: 'Community-led mangrove conservation and restoration project in Gazi Bay, one of the world\'s first blue carbon projects.' },
+  { name: 'Mikoko Pamoja, Kenya', slug: 'mikoko-pamoja-kenya', ecosystem_slug: 'mangrove', region: 'Kwale County', country: 'Kenya', partner: 'KMFRI', lat: -4.42, lng: 39.50, trees_planted: 120000, survival_rate: 0.82, species_count: 5, hectares: 85, year_started: 2021, status: 'active', description: 'Community-led mangrove conservation and restoration project in Gazi Bay, one of the world\'s first blue carbon projects. Primary project behind the MBS01 credit class on Regen Network, with batch MBS01-001-20240601-20340531-001 representing 300,000 biodiversity blocks.' },
   { name: 'Vanga Blue Forest, Kenya', slug: 'vanga-blue-forest-kenya', ecosystem_slug: 'mangrove', region: 'Kwale County', country: 'Kenya', partner: 'VBFC', lat: -4.65, lng: 39.22, trees_planted: 78000, survival_rate: 0.78, species_count: 4, hectares: 60, year_started: 2022, status: 'active', description: 'Blue forest conservation in the Vanga area, protecting mangrove ecosystems along the southern Kenya coast.' },
   { name: 'Tahiry Honko, Madagascar', slug: 'tahiry-honko-madagascar', ecosystem_slug: 'mangrove', region: 'Atsimo-Andrefana', country: 'Madagascar', partner: 'Blue Ventures', lat: -22.12, lng: 43.65, trees_planted: 95000, survival_rate: 0.72, species_count: 6, hectares: 150, year_started: 2020, status: 'active', description: 'Community-managed mangrove restoration in southwestern Madagascar, one of the largest mangrove conservation areas in the western Indian Ocean.' },
   { name: 'Ayeyarwady Delta, Myanmar', slug: 'ayeyarwady-delta-myanmar', ecosystem_slug: 'mangrove', region: 'Ayeyarwady', country: 'Myanmar', partner: 'FFI', lat: 16.00, lng: 95.00, trees_planted: 280000, survival_rate: 0.68, species_count: 3, hectares: 200, year_started: 2019, status: 'active', description: 'Large-scale mangrove restoration in the Ayeyarwady Delta, one of Asia\'s most important coastal ecosystems.' },
@@ -109,12 +117,14 @@ interface CreditDef {
   issued_at: string;
 }
 
+// Real on-chain data from Regen Ledger (MBS01-001 batch)
+// Total supply: 300,000 (58,496 retired, 241,504 tradeable) as of March 2026
 const CREDITS: CreditDef[] = [
-  { project_slug: 'marereni-kenya', batch_denom: 'C04-005-20241022-20341022-001', total_issued: 53200, total_retired: 53200, total_tradeable: 0, credit_class: 'MBCI', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-10-22' },
-  { project_slug: 'mikoko-pamoja-kenya', batch_denom: 'C04-005-20230115-20330115-002', total_issued: 800, total_retired: 800, total_tradeable: 0, credit_class: 'MBCI', price_per_block: 3.00, credit_length_years: 10, issued_at: '2023-01-15' },
-  { project_slug: 'lamu-kenya', batch_denom: 'C04-005-20231201-20331201-003', total_issued: 350, total_retired: 350, total_tradeable: 0, credit_class: 'MBCI', price_per_block: 3.00, credit_length_years: 10, issued_at: '2023-12-01' },
-  { project_slug: 'vanga-blue-forest-kenya', batch_denom: 'C04-005-20240301-20340301-004', total_issued: 500, total_retired: 500, total_tradeable: 0, credit_class: 'MBCI', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-03-01' },
-  { project_slug: 'grand-bahama-bahamas', batch_denom: 'C04-007-20240601-20340601-001', total_issued: 200, total_retired: 150, total_tradeable: 50, credit_class: 'MBCI-C', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-06-01' },
+  { project_slug: 'mikoko-pamoja-kenya', batch_denom: 'MBS01-001-20240601-20340531-001', total_issued: 300000, total_retired: 58496, total_tradeable: 241504, credit_class: 'MBS01', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-10-19' },
+  { project_slug: 'marereni-kenya', batch_denom: 'MBS01-002-20240601-20340531-002', total_issued: 53200, total_retired: 53200, total_tradeable: 0, credit_class: 'MBS01', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-10-22' },
+  { project_slug: 'vanga-blue-forest-kenya', batch_denom: 'MBS01-003-20240301-20340301-001', total_issued: 500, total_retired: 500, total_tradeable: 0, credit_class: 'MBS01', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-03-01' },
+  { project_slug: 'lamu-kenya', batch_denom: 'MBS01-004-20231201-20331201-001', total_issued: 350, total_retired: 350, total_tradeable: 0, credit_class: 'MBS01', price_per_block: 3.00, credit_length_years: 10, issued_at: '2023-12-01' },
+  { project_slug: 'grand-bahama-bahamas', batch_denom: 'MBS01-005-20240601-20340601-001', total_issued: 200, total_retired: 150, total_tradeable: 50, credit_class: 'MBS01', price_per_block: 3.00, credit_length_years: 10, issued_at: '2024-06-01' },
 ];
 
 interface ComparisonDef {
@@ -197,10 +207,21 @@ interface VerificationDef {
 }
 
 const VERIFICATIONS: VerificationDef[] = [
+  // Mikoko Pamoja — primary MBS01 batch
+  { credit_slug: 'mikoko-pamoja-kenya', stage: 'submitted', party_name: 'KMFRI', party_role: 'field_partner', attestation_hash: '', attested_at: '2024-10-15' },
+  { credit_slug: 'mikoko-pamoja-kenya', stage: 'verified', party_name: 'Ocean Ledger', party_role: 'verifier', attestation_hash: '', attested_at: '2024-10-17' },
+  { credit_slug: 'mikoko-pamoja-kenya', stage: 'accepted', party_name: 'Sustainable Surf / SeaTrees', party_role: 'issuer', attestation_hash: '', attested_at: '2024-10-19' },
+  { credit_slug: 'mikoko-pamoja-kenya', stage: 'on_ledger', party_name: 'Regen Network', party_role: 'registry', attestation_hash: '', attested_at: '2024-10-19' },
+  // Marereni Kenya
   { credit_slug: 'marereni-kenya', stage: 'submitted', party_name: 'COBEC', party_role: 'field_partner', attestation_hash: '', attested_at: '2024-10-20' },
   { credit_slug: 'marereni-kenya', stage: 'verified', party_name: 'Ocean Ledger', party_role: 'verifier', attestation_hash: '', attested_at: '2024-10-21' },
   { credit_slug: 'marereni-kenya', stage: 'accepted', party_name: 'Sustainable Surf / SeaTrees', party_role: 'issuer', attestation_hash: '', attested_at: '2024-10-22' },
   { credit_slug: 'marereni-kenya', stage: 'on_ledger', party_name: 'Regen Network', party_role: 'registry', attestation_hash: '', attested_at: '2024-10-22' },
+  // Vanga Blue Forest
+  { credit_slug: 'vanga-blue-forest-kenya', stage: 'submitted', party_name: 'VBFC', party_role: 'field_partner', attestation_hash: '', attested_at: '2024-02-25' },
+  { credit_slug: 'vanga-blue-forest-kenya', stage: 'verified', party_name: 'Ocean Ledger', party_role: 'verifier', attestation_hash: '', attested_at: '2024-02-27' },
+  { credit_slug: 'vanga-blue-forest-kenya', stage: 'accepted', party_name: 'Sustainable Surf / SeaTrees', party_role: 'issuer', attestation_hash: '', attested_at: '2024-03-01' },
+  { credit_slug: 'vanga-blue-forest-kenya', stage: 'on_ledger', party_name: 'Regen Network', party_role: 'registry', attestation_hash: '', attested_at: '2024-03-01' },
 ];
 
 interface MonitoringDef {
@@ -213,6 +234,7 @@ interface MonitoringDef {
 }
 
 const MONITORING_DATA: MonitoringDef[] = [
+  // Marereni Kenya
   { project_slug: 'marereni-kenya', metric_type: 'survival_rate', value: 0.82, unit: 'proportion', measured_at: '2024-03-15', methodology: 'BACI' },
   { project_slug: 'marereni-kenya', metric_type: 'survival_rate', value: 0.80, unit: 'proportion', measured_at: '2024-06-15', methodology: 'BACI' },
   { project_slug: 'marereni-kenya', metric_type: 'survival_rate', value: 0.78, unit: 'proportion', measured_at: '2024-09-15', methodology: 'BACI' },
@@ -223,6 +245,22 @@ const MONITORING_DATA: MonitoringDef[] = [
   { project_slug: 'marereni-kenya', metric_type: 'canopy_cover', value: 6.2, unit: 'm²/tree', measured_at: '2024-12-15', methodology: 'Remote Sensing' },
   { project_slug: 'marereni-kenya', metric_type: 'invertebrate_density', value: 145, unit: 'per_m²', measured_at: '2024-06-15', methodology: 'Transect Survey' },
   { project_slug: 'marereni-kenya', metric_type: 'invertebrate_density', value: 162, unit: 'per_m²', measured_at: '2024-12-15', methodology: 'Transect Survey' },
+  // Mikoko Pamoja Kenya (primary MBS01 project)
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'survival_rate', value: 0.84, unit: 'proportion', measured_at: '2024-03-15', methodology: 'BACI' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'survival_rate', value: 0.82, unit: 'proportion', measured_at: '2024-06-15', methodology: 'BACI' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'survival_rate', value: 0.83, unit: 'proportion', measured_at: '2024-09-15', methodology: 'BACI' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'survival_rate', value: 0.85, unit: 'proportion', measured_at: '2024-12-15', methodology: 'BACI' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'canopy_cover', value: 3.5, unit: 'm²/tree', measured_at: '2024-03-15', methodology: 'Remote Sensing' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'canopy_cover', value: 4.8, unit: 'm²/tree', measured_at: '2024-06-15', methodology: 'Remote Sensing' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'canopy_cover', value: 5.9, unit: 'm²/tree', measured_at: '2024-09-15', methodology: 'Remote Sensing' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'canopy_cover', value: 7.1, unit: 'm²/tree', measured_at: '2024-12-15', methodology: 'Remote Sensing' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'invertebrate_density', value: 168, unit: 'per_m²', measured_at: '2024-06-15', methodology: 'Transect Survey' },
+  { project_slug: 'mikoko-pamoja-kenya', metric_type: 'invertebrate_density', value: 185, unit: 'per_m²', measured_at: '2024-12-15', methodology: 'Transect Survey' },
+  // Vanga Blue Forest Kenya
+  { project_slug: 'vanga-blue-forest-kenya', metric_type: 'survival_rate', value: 0.79, unit: 'proportion', measured_at: '2024-06-15', methodology: 'BACI' },
+  { project_slug: 'vanga-blue-forest-kenya', metric_type: 'survival_rate', value: 0.77, unit: 'proportion', measured_at: '2024-12-15', methodology: 'BACI' },
+  { project_slug: 'vanga-blue-forest-kenya', metric_type: 'canopy_cover', value: 2.8, unit: 'm²/tree', measured_at: '2024-06-15', methodology: 'Remote Sensing' },
+  { project_slug: 'vanga-blue-forest-kenya', metric_type: 'canopy_cover', value: 4.2, unit: 'm²/tree', measured_at: '2024-12-15', methodology: 'Remote Sensing' },
 ];
 
 interface StoryDef {
@@ -536,8 +574,8 @@ async function seed() {
     let verificationCount = 0;
     for (const v of VERIFICATIONS) {
       const creditId = creditIds[v.credit_slug];
-      // Generate deterministic attestation hashes
-      const hash = randomHex64();
+      // Generate deterministic attestation hash from verification record fields
+      const hash = deterministicHash(`${v.credit_slug}:${v.stage}:${v.party_name}:${v.attested_at}`);
       await client.query(
         `INSERT INTO verifications (credit_id, stage, party_name, party_role, attestation_hash, attested_at)
          VALUES ($1, $2, $3, $4, $5, $6)`,

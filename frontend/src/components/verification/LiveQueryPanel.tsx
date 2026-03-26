@@ -34,7 +34,7 @@ const QUERIES: Record<QueryKey, { label: string; endpoint: string; display: stri
   batches: {
     label: 'List all credit batches',
     endpoint: '/api/ledger/batches',
-    display: 'List all SeaTrees MBCI credit batches on Regen Network ledger.',
+    display: 'List all SeaTrees MBS01 credit batches on Regen Network ledger.',
   },
 }
 

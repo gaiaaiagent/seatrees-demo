@@ -6,6 +6,7 @@ import { PageTransition } from '@/components/shared/PageTransition'
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LiveQueryPanel } from '@/components/verification/LiveQueryPanel'
+import { BloomExport } from '@/components/verification/BloomExport'
 import { BatchTimeline } from '@/components/verification/BatchTimeline'
 import { RetirementWaterfall } from '@/components/verification/RetirementWaterfall'
 import { VerificationChain } from '@/components/verification/VerificationChain'
@@ -74,6 +75,11 @@ export default function VerificationPage() {
         {/* Hero: Live Query Panel */}
         <ErrorBoundary>
           <LiveQueryPanel />
+        </ErrorBoundary>
+
+        {/* Bloom CSV Export */}
+        <ErrorBoundary>
+          <BloomExport />
         </ErrorBoundary>
 
         {/* Batch Timeline + Retirement Waterfall */}
