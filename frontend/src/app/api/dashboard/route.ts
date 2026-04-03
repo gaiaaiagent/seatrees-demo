@@ -1,49 +1,57 @@
 import { NextResponse } from 'next/server'
-import { query } from '@/lib/db'
+
+const SUPPLY_URL = 'https://regen.gaiaai.xyz/regen-api/ecocredits/classes/MBS01/supply'
 
 export async function GET() {
-  try {
-    const [summaryResult, projectsResult, recentTxResult] = await Promise.all([
-      query(`
-        SELECT
-          (SELECT COUNT(*) FROM projects)::int AS total_projects,
-          (SELECT COUNT(DISTINCT ecosystem_id) FROM projects)::int AS total_ecosystems,
-          (SELECT COALESCE(SUM(total_retired), 0) FROM credits)::int AS total_blocks_retired,
-          (SELECT COALESCE(SUM(amount_usd), 0) FROM transactions) AS total_revenue,
-          (SELECT COALESCE(SUM(trees_planted), 0) FROM projects)::int AS total_trees
-      `),
-      query(`
-        SELECT p.*, e.name AS ecosystem_name, e.color AS ecosystem_color,
-          COALESCE(c.total_issued, 0)::int AS total_credits_issued,
-          COALESCE(c.total_retired, 0)::int AS total_credits_retired,
-          COALESCE(t.tx_count, 0)::int AS transaction_count,
-          COALESCE(t.revenue, 0) AS total_revenue
-        FROM projects p
-        JOIN ecosystems e ON e.id = p.ecosystem_id
-        LEFT JOIN LATERAL (
-          SELECT SUM(total_issued) AS total_issued, SUM(total_retired) AS total_retired
-          FROM credits WHERE project_id = p.id
-        ) c ON true
-        LEFT JOIN LATERAL (
-          SELECT COUNT(*) AS tx_count, SUM(amount_usd) AS revenue
-          FROM transactions WHERE project_id = p.id
-        ) t ON true
-        ORDER BY t.revenue DESC NULLS LAST
-      `),
-      query(`
-        SELECT t.*, p.name AS project_name, p.slug AS project_slug
-        FROM transactions t JOIN projects p ON p.id = t.project_id
-        ORDER BY t.transaction_date DESC LIMIT 10
-      `),
-    ])
+  let totalRetired = 60369
+  let totalIssued = 300000
 
-    return NextResponse.json({
-      ...summaryResult.rows[0],
-      projects: projectsResult.rows,
-      recent_transactions: recentTxResult.rows,
+  try {
+    const res = await fetch(SUPPLY_URL, {
+      signal: AbortSignal.timeout(10000),
+      next: { revalidate: 60 },
     })
-  } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    if (res.ok) {
+      const json = await res.json()
+      const supply = json.data?.supply ?? {}
+      totalRetired = supply.total_retired ?? totalRetired
+      totalIssued = supply.total_issued ?? totalIssued
+    }
+  } catch {
+    // use fallback values
   }
+
+  return NextResponse.json({
+    total_projects: 1,
+    total_ecosystems: 1,
+    total_blocks_retired: totalRetired,
+    total_revenue: Math.round(totalRetired * 3),
+    total_trees: 190000,
+    projects: [
+      {
+        id: 'marereni-001',
+        name: 'Marereni, Kenya',
+        slug: 'marereni-kenya',
+        ecosystem_id: 'mangrove',
+        ecosystem_name: 'Mangrove',
+        ecosystem_color: '#2d6a4f',
+        region: 'Kilifi County',
+        country: 'Kenya',
+        partner: 'COBEC',
+        lat: -2.98,
+        lng: 40.22,
+        trees_planted: 190000,
+        survival_rate: 0.80,
+        species_count: 4,
+        hectares: 120,
+        year_started: 2022,
+        status: 'active',
+        total_credits_issued: totalIssued,
+        total_credits_retired: totalRetired,
+        transaction_count: 0,
+        total_revenue: Math.round(totalRetired * 3),
+      },
+    ],
+    recent_transactions: [],
+  })
 }
