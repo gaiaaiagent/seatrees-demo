@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 30000)
+    const timeout = setTimeout(() => controller.abort(), 120000)
     const res = await fetch(
       `${BLOOM_EXPORT_URL}?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`,
       { signal: controller.signal }

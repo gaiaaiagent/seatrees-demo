@@ -1,70 +1,48 @@
 import { NextResponse } from 'next/server'
-import { query } from '@/lib/db'
 
-const REGEN_API = 'https://regen-api.polkachu.com'
-const CLASS_ID = 'MBS01'
+const SUPPLY_URL = 'https://regen.gaiaai.xyz/regen-api/ecocredits/classes/MBS01/supply'
 
 export async function GET() {
-  // Try live query to Regen Ledger first
   try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 5000)
-    const res = await fetch(
-      `${REGEN_API}/regen/ecocredit/v1/batches-by-class/${CLASS_ID}`,
-      { signal: controller.signal, next: { revalidate: 60 } }
-    )
-    clearTimeout(timeout)
+    const res = await fetch(SUPPLY_URL, {
+      signal: AbortSignal.timeout(15000),
+      next: { revalidate: 60 },
+    })
     if (res.ok) {
-      const data = await res.json()
-      // Enrich batches with supply data
-      const batches = await Promise.all(
-        (data.batches || []).map(async (batch: { denom: string; project_id: string; start_date: string; end_date: string; issuance_date: string }) => {
-          try {
-            const supplyRes = await fetch(
-              `${REGEN_API}/regen/ecocredit/v1/supply/${batch.denom}`,
-              { signal: controller.signal }
-            )
-            if (supplyRes.ok) {
-              const supply = await supplyRes.json()
-              return {
-                batch_denom: batch.denom,
-                project_id: batch.project_id,
-                total_issued: parseInt(supply.tradable_amount || '0', 10) + parseInt(supply.retired_amount || '0', 10),
-                total_retired: parseInt(supply.retired_amount || '0', 10),
-                start_date: batch.start_date,
-                end_date: batch.end_date,
-                issuance_date: batch.issuance_date,
-              }
-            }
-          } catch { /* skip enrichment */ }
-          return {
-            batch_denom: batch.denom,
-            project_id: batch.project_id,
-            total_issued: 0,
-            total_retired: 0,
-            start_date: batch.start_date,
-            end_date: batch.end_date,
-            issuance_date: batch.issuance_date,
-          }
-        })
-      )
+      const json = await res.json()
+      const batches = (json.data?.batches ?? []).map((b: {
+        denom: string
+        project_id: string
+        total_amount: number
+        retired_amount: number
+        tradable_amount: number
+        start_date: string
+        end_date: string
+      }) => ({
+        batch_denom: b.denom,
+        project_id: b.project_id,
+        total_issued: b.total_amount,
+        total_retired: b.retired_amount,
+        start_date: b.start_date,
+        end_date: b.end_date,
+      }))
       return NextResponse.json({ source: 'live' as const, batches })
     }
   } catch {
-    // Fall through to cached
+    // Fall through to static fallback
   }
 
-  // Fallback to database cache
-  try {
-    const { rows } = await query(
-      `SELECT c.*, p.name AS project_name, p.slug AS project_slug
-       FROM credits c
-       JOIN projects p ON p.id = c.project_id
-       ORDER BY c.issued_at DESC`
-    )
-    return NextResponse.json({ source: 'cached' as const, batches: rows })
-  } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-  }
+  return NextResponse.json({
+    source: 'cached' as const,
+    batches: [
+      {
+        batch_denom: 'MBS01-001-20240601-20340531-001',
+        project_id: 'MBS01-001',
+        total_issued: 300000,
+        total_retired: 60369,
+        start_date: '2024-06-01',
+        end_date: '2034-05-31',
+      },
+    ],
+  })
 }
